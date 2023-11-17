@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "utils"
+version = "0.1.0"
+description = ""
+authors = ["Long Le <hjjddbz@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pytest = "^7.4.3"
+pyyaml = "^6.0.1"
+black = "^23.11.0"
+sqlalchemy = "^2.0.23"
+psycopg2 = "^2.9.9"
+pyjwt = "^2.8.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
