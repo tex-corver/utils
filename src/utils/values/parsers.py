@@ -4,8 +4,7 @@ import enum
 
 
 def prettier_dict(d: dict[any, any], indent: int = 4, sort_keys: bool = True) -> str:
-    """
-    Returns a pretty-printed string representation of a nested dictionary.
+    """Returns a pretty-printed string representation of a nested dictionary.
 
     Args:
         d (dict[any, any]): The dictionary to be pretty-printed.
@@ -14,7 +13,7 @@ def prettier_dict(d: dict[any, any], indent: int = 4, sort_keys: bool = True) ->
         str: A string representation of the dictionary with nested elements indented and keys sorted.
 
     Examples:
-        >>> my_dictionary = {'a': 1, 'b': {'c': 2, 'd': {'e': 3}}}
+        >>> my_dictionary = {"a": 1, "b": {"c": 2, "d": {"e": 3}}}
         >>> prettier_dict(my_dictionary)
         '{\n    "a": 1,\n    "b": {\n        "c": 2,\n        "d": {\n            "e": 3\n        }\n    }\n}'
 
@@ -27,11 +26,8 @@ def prettier_dict(d: dict[any, any], indent: int = 4, sort_keys: bool = True) ->
     return json.dumps(d, indent=indent, sort_keys=sort_keys)
 
 
-def jsonify_datetime(
-    src_datetime: datetime, datetime_format: str = "%Y-%m-%d %H:%M:%S.%f"
-) -> str:
-    """
-    Converts a datetime object to a string representation in JSON format.
+def jsonify_datetime(src_datetime: datetime, datetime_format: str = "%Y-%m-%d %H:%M:%S.%f") -> str:
+    """Converts a datetime object to a string representation in JSON format.
 
     Args:
         src_datetime (datetime): The datetime object to be converted.
@@ -62,8 +58,7 @@ def jsonify_datetime(
 
 
 def jsonify_enum(src_enum: enum.Enum) -> str:
-    """
-    Converts an enumeration value to its string representation.
+    """Converts an enumeration value to its string representation.
 
     Args:
         src_enum (enum.Enum): The enumeration value to be converted.
@@ -96,8 +91,8 @@ def jsonify_dict(
     hidden_attrs: set[str] = None,
     datetime_format: str = None,
 ) -> dict[str, any]:
-    """
-    Converts a dictionary to a JSON-like dictionary representation, with support for datetime and enumeration values.
+    """Converts a dictionary to a JSON-like dictionary representation, with support for datetime and
+    enumeration values.
 
     Args:
         src_dict (dict[str, any]): The dictionary to be converted.
@@ -114,11 +109,7 @@ def jsonify_dict(
         ...     VALUE1 = "First Value"
         ...     VALUE2 = "Second Value"
         ...
-        >>> my_dict = {
-        ...     "key1": 123,
-        ...     "key2": datetime(2023, 8, 10, 10, 30, 0),
-        ...     "key3": MyEnum.VALUE1
-        ... }
+        >>> my_dict = {"key1": 123, "key2": datetime(2023, 8, 10, 10, 30, 0), "key3": MyEnum.VALUE1}
         >>> jsonify_dict(my_dict)
         {'key1': 123, 'key2': '2023-08-10 10:30:00.000000', 'key3': 'First Value'}
 

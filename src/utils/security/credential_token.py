@@ -12,8 +12,7 @@ logger = logging.getLogger(__file__)
 
 @dataclasses.dataclass
 class AbstractToken(abc.ABC):
-    """
-    Abstract base class for token objects.
+    """Abstract base class for token objects.
 
     Attributes:
         token (str, optional): The token string. Defaults to None.
@@ -25,7 +24,7 @@ class AbstractToken(abc.ABC):
         **kwargs: Additional keyword arguments.
 
     Examples:
-        >>> token = AbstractToken(data={'key1': 'value1', 'key2': 'value2'}, token='example_token')
+        >>> token = AbstractToken(data={"key1": "value1", "key2": "value2"}, token="example_token")
         >>> token.token
         'example_token'
         >>> token.data
@@ -46,8 +45,7 @@ class AbstractToken(abc.ABC):
 
 
 class AbstractTokenFactory(abc.ABC):
-    """
-    Abstract base class for token factories.
+    """Abstract base class for token factories.
 
     Attributes:
         secret (str): The secret used for encoding and decoding tokens.
@@ -85,8 +83,7 @@ class AbstractTokenFactory(abc.ABC):
         self.algorithm = algorithm
 
     def encode(self, data: str, *args, **kwargs) -> Type[AbstractToken]:
-        """
-        Encodes the provided data into a token object using the implemented _encode method.
+        """Encodes the provided data into a token object using the implemented _encode method.
 
         Args:
             data (str): The data to be encoded into a token object.
@@ -102,11 +99,8 @@ class AbstractTokenFactory(abc.ABC):
         token = self._encode(data, *args, **kwargs)
         return token
 
-    def decode(
-        self, token: Type[AbstractToken] | str, *args, **kwargs
-    ) -> dict[str, any]:
-        """
-        Decodes the provided token or token object using the implemented _decode method.
+    def decode(self, token: Type[AbstractToken] | str, *args, **kwargs) -> dict[str, any]:
+        """Decodes the provided token or token object using the implemented _decode method.
 
         Args:
             token (Type[AbstractToken] | str): The token or token object to be decoded.
@@ -124,8 +118,7 @@ class AbstractTokenFactory(abc.ABC):
 
     @abc.abstractmethod
     def _encode(self, data: str, *args, **kwargs) -> Type[AbstractToken]:
-        """
-        Abstract method that should be implemented to encode the data into a token object.
+        """Abstract method that should be implemented to encode the data into a token object.
 
         Args:
             data (str): The data to be encoded into a token object.
@@ -141,11 +134,9 @@ class AbstractTokenFactory(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _decode(
-        self, token: Type[AbstractToken] | str, *args, **kwargs
-    ) -> dict[str, any]:
-        """
-        Abstract method that should be implemented to decode the token or token object and return the decoded data.
+    def _decode(self, token: Type[AbstractToken] | str, *args, **kwargs) -> dict[str, any]:
+        """Abstract method that should be implemented to decode the token or token object and return
+        the decoded data.
 
         Args:
             token (Type[AbstractToken] | str): The token or token object to be decoded.
@@ -162,8 +153,7 @@ class AbstractTokenFactory(abc.ABC):
 
 
 class JwtToken(AbstractToken):
-    """
-    Represents a JSON Web Token (JWT) token.
+    """Represents a JSON Web Token (JWT) token.
 
     This class is a subclass of the AbstractToken class and provides functionality specific to JWT tokens.
     JWT tokens are commonly used for authentication and authorization purposes in web applications.
@@ -172,15 +162,13 @@ class JwtToken(AbstractToken):
         token (str): The actual JWT token string.
         expiration (datetime.datetime): The expiration date and time of the token.
         claims (dict): A dictionary containing the claims (payload) of the token.
-
     """
 
     pass
 
 
 class JwtTokenFactory(AbstractTokenFactory):
-    """
-    Factory class for creating and decoding JSON Web Tokens (JWTs).
+    """Factory class for creating and decoding JSON Web Tokens (JWTs).
 
     This class provides methods for encoding data into JWTs and decoding JWTs back into data.
     It inherits from the AbstractTokenFactory class and implements the _encode and _decode methods.
@@ -192,11 +180,13 @@ class JwtTokenFactory(AbstractTokenFactory):
 
     Raises:
         ValueError: If the secret or algorithm is not provided and cannot be fetched from the environment variables.
-
     """
 
     def __init__(
-        self, secret: str = None, algorithm: str = None, from_env: bool = False,
+        self,
+        secret: str = None,
+        algorithm: str = None,
+        from_env: bool = False,
     ):
         logger.debug("----init JwtTokenFactory----")
         config = configuration.get_config().get("security", {}).get("context", {})

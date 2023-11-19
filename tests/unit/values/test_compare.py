@@ -6,6 +6,7 @@ from utils import values
 
 logger = logging.getLogger(__file__)
 
+
 def prepare_dicts(random_dict: dict[str, any]):
     dict_a = random_dict
     return dict_a, dict_a.copy()

@@ -2,8 +2,7 @@ import sqlalchemy
 
 
 class SqlDatabase:
-    """
-    A class representing a SQL database.
+    """A class representing a SQL database.
 
     Args:
         engine (sqlalchemy.engine.Engine, optional): The SQLAlchemy engine to use for database connections.
@@ -42,8 +41,7 @@ class SqlDatabase:
         self.cached = {}
 
     def get(self, table: str, id: str) -> any:
-        """
-        Retrieves a model from the specified table by its id.
+        """Retrieves a model from the specified table by its id.
 
         Args:
             table (str): The name of the table.
@@ -63,8 +61,7 @@ class SqlDatabase:
             return model
 
     def remove(self, table: str, id: str):
-        """
-        Removes a model from the specified table by its id.
+        """Removes a model from the specified table by its id.
 
         Args:
             table (str): The name of the table.
@@ -77,9 +74,7 @@ class SqlDatabase:
             conn.execute(sqlalchemy.text(f"DELETE FROM {table} WHERE id = '{id}';"))
 
     def clear(self):
-        """
-        Clears the cached models.
-        """
+        """Clears the cached models."""
         for table, models in self.cached.items():
             for id in models:
                 self.remove(table, id)

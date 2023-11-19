@@ -2,8 +2,7 @@ import json
 
 
 def response_to_dict(response_content: str) -> dict[str, any]:
-    """
-    Converts a JSON-encoded response content into a dictionary.
+    """Converts a JSON-encoded response content into a dictionary.
 
     Args:
         response_content (str): The JSON-encoded response content.

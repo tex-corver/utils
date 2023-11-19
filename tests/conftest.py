@@ -32,12 +32,13 @@ def random_dict() -> dict[str, any]:
     }
     dict_a["nested_dict"] = nested_dict
     yield dict_a
-    
+
 
 @pytest.fixture
 def config_path() -> str:
     config_path = f"{project_path}/.configs"
     yield config_path
+
 
 @pytest.fixture
 def config() -> dict[str, any]:

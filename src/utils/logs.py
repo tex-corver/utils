@@ -7,8 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class PrettyLogRecord(logging.LogRecord):
-    """
-    Custom LogRecord class that provides a formatted message for logging.
+    """Custom LogRecord class that provides a formatted message for logging.
 
     Inherits from `logging.LogRecord`.
 
@@ -29,7 +28,6 @@ class PrettyLogRecord(logging.LogRecord):
 
     Methods:
         getMessage(): Returns the formatted log message.
-
     """
 
     def __init__(
@@ -45,8 +43,7 @@ class PrettyLogRecord(logging.LogRecord):
         extra={},
         sinfo: str | None = None,
     ) -> None:
-        """
-        Initialize an instance of PrettyLogRecord.
+        """Initialize an instance of PrettyLogRecord.
 
         Args:
             name (str): The name of the logger.
@@ -59,20 +56,15 @@ class PrettyLogRecord(logging.LogRecord):
             func (str, optional): The name of the function where the logging call occurred. Defaults to None.
             extra (Mapping[str, object], optional): Extra attributes to include in the log record. Defaults to {}.
             sinfo (str, optional): Stack information. Defaults to None.
-
         """
-        super().__init__(
-            name, level, pathname, lineno, msg, args, exc_info, func, sinfo
-        )
+        super().__init__(name, level, pathname, lineno, msg, args, exc_info, func, sinfo)
         self.extra = extra
 
     def getMessage(self) -> str:
-        """
-        Get the formatted log message.
+        """Get the formatted log message.
 
         Returns:
             str: The formatted log message.
-
         """
         _msg = str(self.msg)
         if type(self.msg) is dict and self.levelno == logger.debug:
@@ -93,8 +85,7 @@ class PrettyLogRecord(logging.LogRecord):
 
 
 class PrettyLogger(logging.Logger):
-    """
-    Custom logger class that provides a formatted log message.
+    """Custom logger class that provides a formatted log message.
 
     Inherits from `logging.Logger`.
 
@@ -105,17 +96,14 @@ class PrettyLogger(logging.Logger):
     Methods:
         makeRecord(): Create a log record with the provided information.
         debug(): Log a message with the DEBUG level.
-
     """
 
     def __init__(self, name: str, level=0) -> None:
-        """
-        Initialize an instance of PrettyLogger.
+        """Initialize an instance of PrettyLogger.
 
         Args:
             name (str): The name of the logger.
             level (int, optional): The logging level of the logger. Defaults to 0.
-
         """
         super().__init__(name, level)
 
@@ -132,8 +120,7 @@ class PrettyLogger(logging.Logger):
         extra: Mapping[str, object] | None = None,
         sinfo: str | None = None,
     ) -> logging.LogRecord:
-        """
-        Create a log record with the provided information.
+        """Create a log record with the provided information.
 
         Args:
             name (str): The name of the logger.
@@ -159,17 +146,12 @@ class PrettyLogger(logging.Logger):
 
         Returns:
             logging.LogRecord: The created log record.
-
         """
-        rv = PrettyLogRecord(
-            name, level, fn, lno, msg, args, exc_info, func, extra, sinfo
-        )
+        rv = PrettyLogRecord(name, level, fn, lno, msg, args, exc_info, func, extra, sinfo)
         if extra is not None:
             for key in extra:
                 if (key in ["message", "asctime"]) or (key in rv.__dict__):
-                    raise KeyError(
-                        "Attempt to overwrite %r in %s" % (key, rv.__class__.name)
-                    )
+                    raise KeyError("Attempt to overwrite %r in %s" % (key, rv.__class__.name))
                 rv.__dict__[key] = extra[key]
         return rv
 
@@ -182,8 +164,7 @@ class PrettyLogger(logging.Logger):
         stacklevel: int = 1,
         extra: Mapping[str, object] | None = None
     ) -> None:
-        """
-        Log a message with the DEBUG level.
+        """Log a message with the DEBUG level.
 
         Args:
             msg (object): The log message.
@@ -195,13 +176,7 @@ class PrettyLogger(logging.Logger):
 
         Returns:
             None
-
         """
         return super().debug(
-            msg,
-            *args,
-            exc_info=exc_info,
-            stack_info=stack_info,
-            stacklevel=stacklevel,
-            extra=extra
+            msg, *args, exc_info=exc_info, stack_info=stack_info, stacklevel=stacklevel, extra=extra
         )

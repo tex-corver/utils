@@ -1,11 +1,11 @@
-import utils
 from utils import creational
 
+
 @creational.singleton
-class X: 
+class X:
     def __init__(self, a: int = 5):
         self.a = a
-        
+
 
 def test_singleton():
     x = X()

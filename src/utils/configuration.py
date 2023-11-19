@@ -8,9 +8,9 @@ logger = logging.getLogger(__file__)
 
 config = {}
 
+
 def load_config_from_yaml(file_path: str) -> dict[str, any]:
-    """
-    Loads a YAML configuration file and returns it as a dictionary.
+    """Loads a YAML configuration file and returns it as a dictionary.
 
     Args:
         file_path (str): The path to the YAML configuration file.
@@ -37,8 +37,7 @@ def load_config_from_yaml(file_path: str) -> dict[str, any]:
 
 
 def load_logging_config(file_path: str = "logging.ini") -> None:
-    """
-    Loads a logging configuration from a specified file.
+    """Loads a logging configuration from a specified file.
 
     Args:
         file_path (str, optional): The path to the logging configuration file. Defaults to "logging.ini".
@@ -66,8 +65,8 @@ def load_logging_config(file_path: str = "logging.ini") -> None:
 
 
 def load_config_from_files(config_path: str) -> dict[str, any]:
-    """
-    Loads configuration files from the specified directory and returns a merged configuration dictionary.
+    """Loads configuration files from the specified directory and returns a merged configuration
+    dictionary.
 
     Args:
         config_path (str): The path to the directory containing the configuration files.
@@ -112,8 +111,8 @@ def load_config_from_files(config_path: str) -> dict[str, any]:
 
 
 def inject_config_to_env(config_path: str = None) -> dict[str, any] | None:
-    """
-    Injects configuration values into the environment variables and returns the loaded configuration dictionary.
+    """Injects configuration values into the environment variables and returns the loaded
+    configuration dictionary.
 
     Args:
         config_path (str, optional): The path to the directory containing the configuration files. If not provided, the function assumes that the environment variable "PROJECT_PATH" is set and uses it to construct the default configuration directory path. Defaults to None.
@@ -147,6 +146,7 @@ def inject_config_to_env(config_path: str = None) -> dict[str, any] | None:
         if val is not None:
             os.environ[key.upper()] = str(val)
     return config
+
 
 def get_config() -> dict[str, any]:
     global config

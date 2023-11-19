@@ -5,6 +5,7 @@ import jwt
 
 logger = logging.getLogger(__file__)
 
+
 def prepare_jwt_data() -> dict[str, any]:
     data = {
         "a": random.randint(1, 1000),
