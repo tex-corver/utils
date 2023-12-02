@@ -8,10 +8,10 @@ from .values import parsers
 
 config = configuration.get_config()
 
-LOG_METADATA_ENV = [
-    "APPLICATION",
-    "SERVICE",
-    "ENVIRONMENT",
+LOG_METADATA_KEYS = [
+    "application",
+    "service",
+    "environment",
 ]
 
 LOG_KEY_MAPPERS = {
@@ -23,22 +23,119 @@ LOG_KEY_MAPPERS = {
     "pathname": "path_name",
 }
 
+LOG_CONTEXT_KEYS = {
+    "file_name",
+    "func_name",
+    "line_no",
+    "module",
+    "level_no",
+}
+
+
+class DynamicObjectMixin:
+    def __init__(self, **kwargs):
+        for key, val in kwargs.items():
+            setattr(self, key, val)
+
+    def __repr__(self):
+        attributes = ", ".join(f"{k}={v!r}" for k, v in self.__dict__.items())
+        return f"{self.__class__.__name__}({attributes})"
+
+
+@dataclasses.dataclass(init=False)
+class LogContext(DynamicObjectMixin):
+    file_name: str
+    func_name: str
+    line_no: int
+    module: str
+    level_no: int
+
+    def __init__(self, **kwargs):
+        """Init LogContext from LogRecord.
+        Accepted kwargs:
+        - file_name
+        - func_name
+        - line_no
+        - module
+        - level_no
+        """
+        for key, val in kwargs.items():
+            standard_key = parsers.string_to_snake_case(LOG_KEY_MAPPERS.get(key, key))
+            if standard_key not in LOG_CONTEXT_KEYS:
+                # print("not in keys", key)
+                continue
+            setattr(
+                self,
+                standard_key,
+                val,
+            )
+
+    @property
+    def json(self):
+        return self.__dict__
+
+    def __repr__(self):
+        return super().__repr__()
+
+
+@dataclasses.dataclass(init=False)
+class LogMetadata(DynamicObjectMixin):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        for key in LOG_METADATA_KEYS:
+            setattr(self, key.lower(), os.environ.get(key.upper()))
+
+    @property
+    def json(self):
+        return self.__dict__
+
+    def __repr__(self):
+        return super().__repr__()
+
+
 DEFAULT_FILE_NAME = f"{os.environ.get('SERVICE', '')}.log"
 
 
-def standardize_log_keys(d: dict[str, any]) -> dict[str, any]:
+def standardize_log_record(d: dict[str, any]) -> dict[str, any]:
     d_ = {
         parsers.string_to_snake_case(LOG_KEY_MAPPERS.get(key, key)): val
         for key, val in d.items()
     }
+
     return d_
 
 
 @dataclasses.dataclass(init=False)
-class LogContext:
-    application: str
-    service: str
-    environment: str
+class LogRecord(logging.LogRecord):
+    context: LogContext
+    metadata: LogMetadata
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.metadata = LogMetadata()
+        self.context = LogContext(
+            **self.__dict__,
+        )
+
+    @property
+    def json(self):
+        return {
+            "context": self.context.json,
+            "metadata": self.metadata.json,
+            "args": self.args,
+            "message": self.getMessage(),
+            "exc_info": self.exc_info,
+            "stack_info": self.stack_info,
+        }
+
+    def __str__(self):
+        return parsers.prettier_dict(self.json)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({parsers.prettier_dict(self.json)})"
+
+
+logging.setLogRecordFactory(LogRecord)
 
 
 class InlineLogFormatter(logging.Formatter):
@@ -59,14 +156,15 @@ class InlineLogFormatter(logging.Formatter):
 
 class JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
-        record.message = record.getMessage()
-        if record.exc_info:
-            record.exc_text = self.formatException(record.exc_info)
-        else:
-            record.exc_text = ""
-        if record.stack_info:
-            record.stack_info = self.formatStack(record.stack_info)
-        d = standardize_log_keys(record.__dict__)
+        s = super().format(record)
+        # record.message = record.getMessage()
+        # if record.exc_info:
+        #     record.exc_text = self.formatException(record.exc_info)
+        # else:
+        #     record.exc_text = ""
+        # if record.stack_info:
+        #     record.stack_info = self.formatStack(record.stack_info)
+        d = standardize_log_record(record.json)
         return parsers.prettier_dict(d)
 
 
