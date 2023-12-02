@@ -7,13 +7,15 @@ import logging.config
 import os
 import yaml
 import pathlib
-from utils import configuration
 import uuid
 
 PROJECT_PATH = pathlib.Path(os.path.abspath(__file__)).parents[1]
 os.environ["PROJECT_PATH"] = str(PROJECT_PATH)
 project_path = os.environ["PROJECT_PATH"]
-configuration.load_config_from_files(config_path=str(PROJECT_PATH / ".configs"))
+
+from utils import configuration
+
+
 logger = logging.getLogger(__file__)
 
 

@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Long Le <hjjddbz@gmail.com>"]
 readme = "README.md"
+packages = [{ include = "utils", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -98,3 +99,8 @@ missing-member-max-choices = 1
 [tool.pylint."VARIABLES"] # Regex pattern to define which classes are considered mixins.
 ignored-argument-names = "_.*|^ignored_|^unused_"
 init-import = "no"
+
+[tool.pytest.ini_options]
+addopts = "-s -vvv"
+log_cli = "true"
+log_level = "DEBUG"

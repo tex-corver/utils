@@ -6,7 +6,22 @@ import logging.config
 
 logger = logging.getLogger(__file__)
 
-config = {}
+config = None
+
+DEFAULT_CONFIG_PATH = str(pathlib.Path(os.environ.get("PROJECT_PATH", "")) / ".configs")
+config_path = None
+
+
+def set_config_path(config_path_: str = None):
+    global config_path
+    config_path = config_path_
+
+
+def get_config_path() -> str:
+    global config_path
+    if config_path is None:
+        config_path = str(pathlib.Path(os.environ.get("PROJECT_PATH", "")) / ".configs")
+    return config_path
 
 
 def load_config_from_yaml(file_path: str) -> dict[str, any]:
@@ -90,7 +105,6 @@ def load_config_from_files(config_path: str) -> dict[str, any]:
         None.
     """
     config_files = os.walk(config_path)
-    global config
     config = {}
     handlers = {
         ".yaml": load_config_from_yaml,
@@ -139,15 +153,34 @@ def inject_config_to_env(config_path: str = None) -> dict[str, any] | None:
     """
     logger.debug("--------injecting configuration to environment--------")
     if config_path is None:
-        project_path = os.environ["PROJECT_PATH"]
-        config_path = f"{project_path}/.configs"
-    config = load_config_from_files(config_path)
+        config_path = get_config_path()
+    config = load_config_from_yaml(config_path)
+    logger.info(config)
     for key, val in config.items():
         if val is not None:
             os.environ[key.upper()] = str(val)
     return config
 
 
+def set_config(new_config: dict[str, any] = None) -> dict[str, any]:
+    global config
+    config = new_config
+    return config
+
+
+def load_config(config_path: str = None) -> dict[str, any]:
+    global config
+    if config_path is None:
+        config_path = get_config_path()
+    config = load_config_from_files(config_path)
+    additional_env_path = str(pathlib.Path(config_path) / "env.yaml")
+    if os.path.isfile(additional_env_path):
+        _ = inject_config_to_env(additional_env_path)
+    return config
+
+
 def get_config() -> dict[str, any]:
     global config
+    if config is None:
+        config = load_config(get_config_path())
     return config

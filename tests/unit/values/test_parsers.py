@@ -36,3 +36,9 @@ def test_jsonify_dict():
 
     # Assert
     assert result_dict == expected_dict
+
+
+def test_string_converter():
+    s = "MainThread"
+    result = parsers.string_to_snake_case(s)
+    logger.info(result)

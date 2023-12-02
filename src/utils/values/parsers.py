@@ -1,6 +1,15 @@
 import json
 from datetime import datetime
 import enum
+import re
+
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, obj: object):
+        try:
+            return super().default(obj)
+        except TypeError:
+            return str(obj)
 
 
 def prettier_dict(d: dict[any, any], indent: int = 4, sort_keys: bool = True) -> str:
@@ -23,10 +32,13 @@ def prettier_dict(d: dict[any, any], indent: int = 4, sort_keys: bool = True) ->
     Raises:
         None.
     """
-    return json.dumps(d, indent=indent, sort_keys=sort_keys)
+
+    return json.dumps(d, indent=indent, sort_keys=sort_keys, cls=JSONEncoder)
 
 
-def jsonify_datetime(src_datetime: datetime, datetime_format: str = "%Y-%m-%d %H:%M:%S.%f") -> str:
+def jsonify_datetime(
+    src_datetime: datetime, datetime_format: str = "%Y-%m-%d %H:%M:%S.%f"
+) -> str:
     """Converts a datetime object to a string representation in JSON format.
 
     Args:
@@ -134,3 +146,8 @@ def jsonify_dict(
         if isinstance(value, enum.Enum):
             data[attr] = jsonify_enum(value)
     return data
+
+
+def string_to_snake_case(s: str) -> str:
+    s = re.sub("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))", r"_\1", s).lower()
+    return s
