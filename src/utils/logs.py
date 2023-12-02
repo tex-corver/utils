@@ -7,7 +7,9 @@ from . import configuration
 from .values import parsers
 
 config = configuration.get_config()
-
+DEFAULT_INLINE_LOG_FORMAT = (
+    "%(asctime)s - %(name)s - %(filename)s - %(levelname)s:\n%(message)s"
+)
 LOG_METADATA_KEYS = [
     "application",
     "service",
@@ -139,11 +141,17 @@ logging.setLogRecordFactory(LogRecord)
 
 
 class InlineLogFormatter(logging.Formatter):
-    def __init__(self, fmt=None, datefmt=None, style="%", metadata=None):
+    def __init__(
+        self,
+        fmt=DEFAULT_INLINE_LOG_FORMAT,
+        datefmt=None,
+        style="%",
+    ):
         super().__init__(fmt, datefmt, style)
-        self.metadata = metadata
 
-    def format(self, record: logging.LogRecord):
+
+class JsonFormatter(logging.Formatter):
+    def format(self, record: logging.LogRecord) -> str:
         record.message = record.getMessage()
         if record.exc_info:
             record.exc_text = self.formatException(record.exc_info)
@@ -151,19 +159,6 @@ class InlineLogFormatter(logging.Formatter):
             record.exc_text = ""
         if record.stack_info:
             record.stack_info = self.formatStack(record.stack_info)
-        return record.__dict__
-
-
-class JsonFormatter(logging.Formatter):
-    def format(self, record: logging.LogRecord) -> str:
-        s = super().format(record)
-        # record.message = record.getMessage()
-        # if record.exc_info:
-        #     record.exc_text = self.formatException(record.exc_info)
-        # else:
-        #     record.exc_text = ""
-        # if record.stack_info:
-        #     record.stack_info = self.formatStack(record.stack_info)
         d = standardize_log_record(record.json)
         return parsers.prettier_dict(d)
 
@@ -187,6 +182,8 @@ class PersistentLogHandler(logging.FileHandler):
 class TemporaryLogHandler(logging.StreamHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        inline_formatter = InlineLogFormatter()
+        self.setFormatter(inline_formatter)
 
 
 class Logger(logging.Logger):

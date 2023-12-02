@@ -92,7 +92,7 @@ class TestPersistentLogHandler:
 class TestLogger:
     def test_init(
         self,
-        # teardown,
+        teardown,
     ):
         logger = logs.Logger("test_logger_init")
         found = {
@@ -106,21 +106,20 @@ class TestLogger:
 
     def test_log_text_only(
         self,
-        # teardown,
+        teardown,
     ):
         logging.setLoggerClass(logs.Logger)
-        logger = logging.getLogger("test_logger_log")
+        logger = logging.getLogger("test_logger_log_text")
         logger.info("test text")
 
     def test_log_with_arguments(self):
         logging.setLoggerClass(logs.Logger)
-        logger = logging.getLogger("test_logger_log")
+        logger = logging.getLogger("test_logger_log_args")
         x = random.randint(0, 100)
         logger.info("test %s", x)
 
 
-# def test_temporary_log():
-#     logger = logging.getLogger("test-temporary-log")
-#     assert isinstance(logger, logs.Logger)
-#     logger.info("test text")
-# logger.info(logger.handlers)
+def test_temporary_log():
+    logger = logging.getLogger("test_temporary_log")
+    assert isinstance(logger, logs.Logger)
+    logger.info("test text")
