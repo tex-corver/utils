@@ -160,7 +160,7 @@ class JsonFormatter(logging.Formatter):
         if record.stack_info:
             record.stack_info = self.formatStack(record.stack_info)
         d = standardize_log_record(record.json)
-        return parsers.prettier_dict(d)
+        return json.dumps(d)
 
 
 class PersistentLogHandler(logging.FileHandler):

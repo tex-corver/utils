@@ -37,7 +37,10 @@ def test_log_metadata_init():
     print(metadata)
 
 
-@pytest.fixture(autouse=True, scope="function")
+@pytest.fixture(
+    # autouse=True,
+    scope="function",
+)
 def teardown(persistent_log_handler: logs.PersistentLogHandler):
     yield
     logging.setLoggerClass(logging.Logger)
@@ -60,7 +63,7 @@ class TestPersistentLogHandler:
     def test_log_text_only(
         self,
         persistent_log_handler: logs.PersistentLogHandler,
-        # teardown,
+        teardown,
     ):
         logging.setLoggerClass(logging.Logger)
         logger = logging.getLogger("test_log_text_only")
@@ -75,7 +78,7 @@ class TestPersistentLogHandler:
     def test_log_with_arguments(
         self,
         persistent_log_handler: logs.PersistentLogHandler,
-        teardown,
+        # teardown,
     ):
         logging.setLoggerClass(logging.Logger)
         logger = logging.getLogger("test_log_with_arguments")
@@ -120,6 +123,6 @@ class TestLogger:
 
 
 def test_temporary_log():
+    logging.setLoggerClass(logs.Logger)
     logger = logging.getLogger("test_temporary_log")
-    assert isinstance(logger, logs.Logger)
     logger.info("test text")

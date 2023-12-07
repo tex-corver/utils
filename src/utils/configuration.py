@@ -46,6 +46,9 @@ def load_config_from_yaml(file_path: str) -> dict[str, any]:
         None.
     """
     logger.debug("--------injecting configuration from file %s--------", file_path)
+    if not os.path.isfile(file_path):
+        logger.warning("invalid file path: %s", file_path)
+        return {}
     with open(file_path, "r") as file:
         config = yaml.safe_load(file)
         return config
@@ -55,7 +58,8 @@ def load_logging_config(file_path: str = "logging.ini") -> None:
     """Loads a logging configuration from a specified file.
 
     Args:
-        file_path (str, optional): The path to the logging configuration file. Defaults to "logging.ini".
+        file_path (str, optional): The path to the logging configuration file. Defaults to
+        "logging.ini".
 
     Returns:
         None
@@ -68,7 +72,8 @@ def load_logging_config(file_path: str = "logging.ini") -> None:
         (Loads the logging configuration from the file "custom_logging.ini")
 
     Note:
-        - This function uses the `logging.config.fileConfig` method to load the logging configuration from the specified file.
+        - This function uses the `logging.config.fileConfig` method to load the logging
+        configuration from the specified file.
         - If no `file_path` is provided, the default value "logging.ini" is used.
         - The function does not return any value.
 
@@ -95,9 +100,11 @@ def load_config_from_files(config_path: str) -> dict[str, any]:
 
     Note:
         - This function assumes that the `config_path` argument points to a valid directory.
-        - It uses the `os.walk` function to traverse through the directory and find configuration files.
+        - It uses the `os.walk` function to traverse through the directory and find configuration
+        files.
         - The `handlers` dictionary maps file extensions to corresponding loader functions.
-        - For each file found, the function determines its file type based on the extension and uses the corresponding loader function to load the configuration.
+        - For each file found, the function determines its file type based on the extension and
+        uses the corresponding loader function to load the configuration.
         - The loaded configuration dictionaries are merged into a single dictionary.
         - The merged configuration dictionary is returned.
 

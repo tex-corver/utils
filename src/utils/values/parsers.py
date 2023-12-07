@@ -5,14 +5,26 @@ import re
 
 
 class JSONEncoder(json.JSONEncoder):
-    def default(self, obj: object):
+    def default(self, obj: object) -> str:
         try:
             return super().default(obj)
         except TypeError:
             return str(obj)
 
 
-def prettier_dict(d: dict[any, any], indent: int = 4, sort_keys: bool = True) -> str:
+class JSONLogEncder(json.JSONEncoder):
+    def default(self, obj: object) -> str:
+        s = super().default(obj)
+        return super().default(obj)
+
+
+def prettier_dict(
+    d: dict[any, any],
+    indent: int = 4,
+    sort_keys: bool = True,
+    json_encoder: json.JSONEncoder = JSONEncoder,
+    separators: tuple[str, str] = (",", ": "),
+) -> str:
     """Returns a pretty-printed string representation of a nested dictionary.
 
     Args:
@@ -33,7 +45,13 @@ def prettier_dict(d: dict[any, any], indent: int = 4, sort_keys: bool = True) ->
         None.
     """
 
-    return json.dumps(d, indent=indent, sort_keys=sort_keys, cls=JSONEncoder)
+    return json.dumps(
+        d,
+        indent=indent,
+        sort_keys=sort_keys,
+        cls=json_encoder,
+        separators=separators,
+    )
 
 
 def jsonify_datetime(
