@@ -1,4 +1,9 @@
 def singleton(cls):
+    """singleton.
+
+    Args:
+        cls:
+    """
     instances = {}
 
     def _singleton(*args, **kwargs):

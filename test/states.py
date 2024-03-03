@@ -2,6 +2,8 @@ from __future__ import annotations
 
 
 class TestState:
+    """TestState."""
+
     def __init__(
         self,
         data: dict[str, any] = None,
@@ -13,6 +15,14 @@ class TestState:
         self.messages = messages if messages is not None else {}
 
     def __add__(self, other: TestState) -> TestState:
+        """__add__.
+
+        Args:
+            other (TestState): other
+
+        Returns:
+            TestState:
+        """
         state = TestState(
             data=self.data | other.data,
             responses=self.responses | other.responses,
@@ -21,12 +31,28 @@ class TestState:
         return state
 
     def __iadd__(self, other: TestState) -> TestState:
+        """__iadd__.
+
+        Args:
+            other (TestState): other
+
+        Returns:
+            TestState:
+        """
         self.data = self.data | other.data
         self.responses = self.responses | other.responses
         self.messages = self.messages | other.messages
         return self
 
     def __eq__(self, other: TestState) -> bool:
+        """__eq__.
+
+        Args:
+            other (TestState): other
+
+        Returns:
+            bool:
+        """
         return (
             self.data == other.data
             and self.responses == other.responses
@@ -34,4 +60,11 @@ class TestState:
         )
 
     def __str__(self) -> str:
+        """__str__.
+
+        Args:
+
+        Returns:
+            str:
+        """
         return f"TestState(\n\tdata={self.data},\n\tresponses={self.responses},\n\tmessages={self.messages}\n)"
