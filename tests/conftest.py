@@ -1,11 +1,9 @@
+from typing import Any
 import pytest
 import random
 import uuid
 
-import logging
-import logging.config
 import os
-import yaml
 import pathlib
 import uuid
 
@@ -16,12 +14,9 @@ project_path = os.environ["PROJECT_PATH"]
 from utils import configuration
 
 
-logger = logging.getLogger(__file__)
-
-
 @pytest.fixture
-def random_dict() -> dict[str, any]:
-    dict_a = {
+def random_dict():
+    dict_a: dict[str, Any] = {
         key: value
         for key in [str(uuid.uuid4()) for _ in range(10)]
         for value in [random.randint(1, 100000) for _ in range(10)]
@@ -37,12 +32,12 @@ def random_dict() -> dict[str, any]:
 
 
 @pytest.fixture
-def config_path() -> str:
+def config_path():
     config_path = f"{project_path}/.configs"
     yield config_path
 
 
 @pytest.fixture
-def config() -> dict[str, any]:
+def config():
     config = configuration.get_config()
     yield config
