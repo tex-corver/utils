@@ -1,20 +1,24 @@
 from __future__ import annotations
 
+from typing import Any, override
 
-class TestState:
+
+class UnitTestState:
     """TestState."""
 
     def __init__(
         self,
-        data: dict[str, any] = None,
-        responses: dict[str, any] = None,
-        messages: dict[str, any] = None,
+        data: dict[str, Any] | None = None,
+        responses: dict[str, Any] | None = None,
+        messages: dict[str, Any] | None = None,
     ):
+        super().__init__()
+
         self.data = data if data is not None else {}
         self.responses = responses if responses is not None else {}
         self.messages = messages if messages is not None else {}
 
-    def __add__(self, other: TestState) -> TestState:
+    def __add__(self, other: UnitTestState) -> UnitTestState:
         """__add__.
 
         Args:
@@ -23,14 +27,14 @@ class TestState:
         Returns:
             TestState:
         """
-        state = TestState(
+        state = UnitTestState(
             data=self.data | other.data,
             responses=self.responses | other.responses,
             messages=self.messages | other.messages,
         )
         return state
 
-    def __iadd__(self, other: TestState) -> TestState:
+    def __iadd__(self, other: UnitTestState) -> UnitTestState:
         """__iadd__.
 
         Args:
@@ -44,7 +48,8 @@ class TestState:
         self.messages = self.messages | other.messages
         return self
 
-    def __eq__(self, other: TestState) -> bool:
+    @override
+    def __eq__(self, other: object) -> bool:
         """__eq__.
 
         Args:
@@ -53,12 +58,15 @@ class TestState:
         Returns:
             bool:
         """
+        assert isinstance(other, UnitTestState)
+
         return (
             self.data == other.data
             and self.responses == other.responses
             and self.messages == other.messages
         )
 
+    @override
     def __str__(self) -> str:
         """__str__.
 

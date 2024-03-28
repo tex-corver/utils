@@ -1,20 +1,21 @@
-from utils import parsers
-import logging
-from datetime import datetime
 import enum
+from datetime import datetime
+from typing import Any
 
-logger = logging.getLogger(__file__)
+from loguru import logger
+
+from utils import parsers
 
 
 class TestParser:
     def test_prettier_dict(
         self,
-        random_dict: dict[str, any],
+        random_dict: dict[str, Any],
     ):
         logger.info(parsers.prettier_dict(random_dict))
 
 
-class TestEnum(enum.Enum):
+class EnumTest(enum.Enum):
     VALUE1 = "value1"
     VALUE2 = "value2"
 
@@ -25,10 +26,14 @@ def test_jsonify_dict():
         "key1": "value1",
         "_key2": "value2",
         "key3": datetime(2022, 1, 1),
-        "key4": TestEnum.VALUE1,
+        "key4": EnumTest.VALUE1,
         "hidden_key": "hidden_value",
     }
-    expected_dict = {"key1": "value1", "key3": "2022-01-01T00:00:00", "key4": "value1"}
+    expected_dict = {
+        "key1": "value1",
+        "key3": "2022-01-01T00:00:00",
+        "key4": "value1",
+    }
     hidden_attrs = {"hidden_key"}
 
     # Act

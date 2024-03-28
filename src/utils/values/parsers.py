@@ -93,7 +93,7 @@ def jsonify_datetime(
     Raises:
         None.
     """
-    datetime_format = datetime_format or "%Y-%m-%d %H:%M:%S.%f"
+    datetime_format = datetime_format or "%Y-%m-%dT%H:%M:%S"
     return src_datetime.strftime(datetime_format)
 
 

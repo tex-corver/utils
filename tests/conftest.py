@@ -1,17 +1,15 @@
-from typing import Any
-import pytest
-import random
-import uuid
-
 import os
 import pathlib
+import random
 import uuid
+from typing import Any
+
+import pytest
+from utils import configuration
 
 PROJECT_PATH = pathlib.Path(os.path.abspath(__file__)).parents[1]
 os.environ["PROJECT_PATH"] = str(PROJECT_PATH)
 project_path = os.environ["PROJECT_PATH"]
-
-from utils import configuration
 
 
 @pytest.fixture

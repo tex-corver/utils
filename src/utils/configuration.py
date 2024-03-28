@@ -5,7 +5,7 @@ from typing import Any
 import yaml
 
 
-class Configuration(dict):
+class Configuration(dict[str, Any]):
     """
     A custom dictionary class for storing configuration settings.
 
@@ -36,8 +36,8 @@ def load_config(config_path: str = ".configs") -> dict[str, Any]:
         for file in files:
             if file.endswith(".yaml") or file.endswith(".yml"):
                 with open(pathlib.Path(root) / file, "r", encoding="utf-8") as file:
-                    config = yaml.safe_load(file)
-                    config.update(config)
+                    sub_config = yaml.safe_load(file)
+                    config.update(sub_config)
 
     return config
 

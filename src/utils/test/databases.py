@@ -1,3 +1,5 @@
+from typing import Any
+
 import sqlalchemy
 
 
@@ -13,7 +15,7 @@ class SqlDatabase:
         cached (dict): A dictionary to cache retrieved models.
 
     Methods:
-        get(table: str, id: str) -> any:
+        get(table: str, id: str) -> Any:
             Retrieves a model from the specified table by its id.
 
         remove(table: str, id: str):
@@ -32,15 +34,24 @@ class SqlDatabase:
         database.clear()
     """
 
-    def __init__(self, engine: sqlalchemy.engine.Engine = None, uri: str = None):
+    def __init__(
+        self,
+        engine: sqlalchemy.engine.Engine | None = None,
+        uri: str | None = None,
+    ):
+        super().__init__()
+
         if engine is None and uri is None:
             raise ValueError("At least provide engine or uri")
-        if engine is None:
-            engine = sqlalchemy.create_engine(uri)
-        self.engine = engine
-        self.cached = {}
 
-    def get(self, table: str, id: str) -> any:
+        if engine is None:
+            assert uri
+            engine = sqlalchemy.create_engine(uri)
+
+        self.engine = engine
+        self.cached: dict[str, set[str]] = {}
+
+    def get(self, table: str, id: str) -> Any:
         """Retrieves a model from the specified table by its id.
 
         Args:
@@ -48,7 +59,7 @@ class SqlDatabase:
             id (str): The id of the model to retrieve.
 
         Returns:
-            any: The retrieved model.
+            Any: The retrieved model.
 
         Raises:
             sqlalchemy.exc.ResourceClosedError: If the execution of the SQL statement fails.

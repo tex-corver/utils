@@ -1,29 +1,26 @@
-import pytest
-import logging
 import random
 import uuid
+from typing import Any
+
 from utils import values
 
-logger = logging.getLogger(__file__)
 
-
-def prepare_dicts(random_dict: dict[str, any]):
+def prepare_dicts(random_dict: dict[str, Any]):
     dict_a = random_dict
     return dict_a, dict_a.copy()
 
 
 class TestCompare:
-    def test_is_sub_dict(self, random_dict: dict[str, any]):
+    def test_is_sub_dict(self, random_dict: dict[str, Any]):
         # Arrange
         dict_a, dict_b = prepare_dicts(random_dict)
         # Act
         result, key = values.is_sub_dict(dict_a, dict_b)
-        logger.debug(dict_a)
         # Assert
         assert result
         assert key is None
 
-    def test_not_sub_dict(self, random_dict: dict[str, any]):
+    def test_not_sub_dict(self, random_dict: dict[str, Any]):
         # Arrange
         dict_a, dict_b = prepare_dicts(random_dict)
         diff_key = str(uuid.uuid4())
