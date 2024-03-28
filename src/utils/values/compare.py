@@ -1,13 +1,11 @@
-import logging
-
-logger = logging.getLogger(__file__)
+from typing import Any
 
 
 def is_sub_dict(
-    dict_a: dict,
-    dict_b: dict,
-    ignore_attrs: set[str] = None,
-) -> tuple[bool, str]:
+    dict_a: dict[Any, Any],
+    dict_b: dict[Any, Any],
+    ignore_attrs: set[str] | None = None,
+) -> tuple[bool, Any | None]:
     """Checks if `dict_b` is a sub-dictionary of `dict_a`.
 
     Args:
@@ -43,13 +41,14 @@ def is_sub_dict(
     """
     if len(dict_a.keys()) < len(dict_b.keys()):
         dict_a, dict_b = dict_b, dict_a
+
     if ignore_attrs is None:
-        ignore_attrs = []
+        ignore_attrs = set()
+
     for attr, value in dict_b.items():
         if attr not in dict_a:
-            logger.debug("there is no key `%s`", attr)
             return False, attr
         if value != dict_a[attr]:
-            logger.debug("%s != %s", dict_a[attr], value)
             return False, attr
+
     return True, None

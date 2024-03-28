@@ -1,9 +1,9 @@
-import pytest
-from utils import configuration
 import os
-import logging
+from typing import Any
 
-logger = logging.getLogger(__file__)
+import pytest
+
+from utils import configuration
 
 config_path: str = f'{os.environ.get("PROJECT_PATH")}/.configs'
 
@@ -11,23 +11,19 @@ config_path: str = f'{os.environ.get("PROJECT_PATH")}/.configs'
 @pytest.fixture
 def teardown():
     yield
-    configuration.set_config(None)
 
 
-def assert_config(config: dict[str, any]) -> bool:
-    logger.info(config)
+def assert_config(config: dict[str, Any]):
     assert "database" in config
 
 
-def test_get_config_before_load_config(teardown):
-    logger.info(os.environ.get("PROJECT_PATH"))
-    logger.info(configuration.config)
+def test_get_config_before_load_config():
     config = configuration.get_config()
     assert_config(config)
 
 
 def test_get_config():
-    config = configuration.load_config_from_files(config_path=config_path)
+    config = configuration.load_config(config_path=config_path)
     assert_config(config)
 
 
@@ -38,19 +34,6 @@ def test_get_config_when_load_config_used_from_another_file():
 
 def test_override_config():
     config_path = f'{os.environ.get("PROJECT_PATH")}/tests/data/configs'
-    new_config = configuration.load_config_from_files(config_path)
+    new_config = configuration.load_config(config_path)
     assert "not_database" in new_config
     assert "database" not in new_config
-
-
-def test_load_config_to_env():
-    config = configuration.inject_config_to_env(
-        config_path=config_path,
-    )
-    logger.info(config)
-    assert config is not None
-    for key in config:
-        assert os.environ.get(key.upper()) is not None
-    d = os.environ
-    for key, val in d.items():
-        logger.info("%s: %s", key, val)

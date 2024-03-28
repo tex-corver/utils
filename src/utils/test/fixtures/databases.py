@@ -1,20 +1,19 @@
-import logging
-import pytest
 import os
-from .. import databases
-from ... import configuration
 
-logger = logging.getLogger(__file__)
+import pytest
+
+from utils import configuration
+from utils.test import databases
 
 
 @pytest.fixture
-def load_config(config_path: str) -> dict[str, any]:
+def load_config(config_path: str):
     """Pytest fixture that loads the configuration object into the environment.
 
     This fixture loads the configuration object into the environment by calling `configuration.inject_config_to_env()` and yields the configuration object.
 
     Returns:
-        dict[str, any]: The configuration object.
+        dict[str, Any]: The configuration object.
 
     Usage:
         This fixture can be used in pytest tests by including it as an argument in the test function.
@@ -22,19 +21,18 @@ def load_config(config_path: str) -> dict[str, any]:
         Example:
         def test_something(load_config):
     """
-    logger.debug(config_path)
-    config = configuration.load_config_from_files(config_path=config_path)
-    logger.debug(config)
+    config = configuration.load_config(config_path=config_path)
+    yield config
 
 
 @pytest.fixture
-def config() -> dict[str, any]:
+def config():
     """Pytest fixture that provides the configuration object.
 
     This fixture retrieves the configuration object from the environment variable "CONFIG" and yields it.
 
     Returns:
-        dict[str, any]: The configuration object.
+        dict[str, Any]: The configuration object.
 
     Usage:
         This fixture can be used in pytest tests by including it as an argument in the test function.
@@ -45,12 +43,11 @@ def config() -> dict[str, any]:
             ...
     """
     config = configuration.get_config()
-    logger.debug("config: %s", config)
     yield config
 
 
 @pytest.fixture
-def sql_database_uri(load_config: None) -> str:
+def sql_database_uri(load_config: None):
     """Pytest fixture that provides the SQL database URI.
 
     This fixture retrieves the SQL database URI from the environment variable "DATABASE_URI" and yields it.
@@ -70,12 +67,11 @@ def sql_database_uri(load_config: None) -> str:
     uri = config.get("database", {}).get("connection").get("uri")
     if uri is None:
         uri = os.environ.get("DATABASE_URI")
-    logger.debug("sql_database_uri: %s", uri)
     yield uri
 
 
 @pytest.fixture
-def sql_database(sql_database_uri: str, load_config: None) -> databases.SqlDatabase:
+def sql_database(sql_database_uri: str, load_config: None):
     """Pytest fixture that provides a SQL database object.
 
     This fixture takes the SQL database URI as an argument and creates a `SqlDatabase` object using the provided URI. It yields the `SqlDatabase` object, allowing it to be used in pytest tests.

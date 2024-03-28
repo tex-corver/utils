@@ -1,19 +1,19 @@
-from utils.test import TestState
+from utils.test import UnitTestState
 
 
 def test_add_state():
-    x = TestState(
+    x = UnitTestState(
         data={"a": 1},
         responses={"b": 2},
         messages={"c": 2, "z": 5},
     )
-    y = TestState(
+    y = UnitTestState(
         data={"a": 3},
         responses={"c": 8},
         messages={"c": 3},
     )
 
-    expected = TestState(
+    expected = UnitTestState(
         data={"a": 3},
         responses={"b": 2, "c": 8},
         messages={"c": 3, "z": 5},
@@ -22,17 +22,17 @@ def test_add_state():
 
 
 def test_add_state_with_none():
-    x = TestState(
+    x = UnitTestState(
         data={"a": 1},
         messages={"c": 2, "z": 5},
     )
-    y = TestState(
+    y = UnitTestState(
         data={"a": 3},
         responses={"c": 8},
         messages={"c": 3},
     )
 
-    expected = TestState(
+    expected = UnitTestState(
         data={"a": 3},
         responses={"c": 8},
         messages={"c": 3, "z": 5},
@@ -41,17 +41,17 @@ def test_add_state_with_none():
 
 
 def test_iadd_state():
-    x = TestState(
+    x = UnitTestState(
         data={"a": 1},
         responses={"b": 2},
         messages={"c": 2, "z": 5},
     )
-    y = TestState(
+    y = UnitTestState(
         data={"a": 3},
         responses={"c": 8},
         messages={"c": 3},
     )
-    expected = TestState(
+    expected = UnitTestState(
         data={"a": 3},
         responses={"b": 2, "c": 8},
         messages={"c": 3, "z": 5},
@@ -61,17 +61,17 @@ def test_iadd_state():
 
 
 def test_iadd_state_with_none():
-    x = TestState(
+    x = UnitTestState(
         data={"a": 1},
         messages={"c": 2, "z": 5},
     )
-    y = TestState(
+    y = UnitTestState(
         data={"a": 3},
         responses={"c": 8},
         messages={"c": 3},
     )
 
-    expected = TestState(
+    expected = UnitTestState(
         data={"a": 3},
         responses={"c": 8},
         messages={"c": 3, "z": 5},

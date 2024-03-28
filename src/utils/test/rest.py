@@ -1,7 +1,8 @@
 import json
+from typing import Any
 
 
-def response_to_dict(response_content: str) -> dict[str, any]:
+def response_to_dict(response_content: str) -> dict[str, Any]:
     """Converts a JSON-encoded response content into a dictionary.
 
     Args:
@@ -18,4 +19,4 @@ def response_to_dict(response_content: str) -> dict[str, any]:
         response_dict = response_to_dict(response_content)
         # Output: {'key': 'value'}
     """
-    return json.loads(response_content.decode())
+    return json.loads(response_content)

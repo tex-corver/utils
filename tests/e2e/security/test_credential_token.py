@@ -1,12 +1,15 @@
-import random
 import logging
-from utils import security
+import random
+from typing import Any
+
 import jwt
+
+from utils import security
 
 logger = logging.getLogger(__file__)
 
 
-def prepare_jwt_data() -> dict[str, any]:
+def prepare_jwt_data() -> dict[str, Any]:
     data = {
         "a": random.randint(1, 1000),
         "b": random.randint(1, 1000),
@@ -18,7 +21,7 @@ def prepare_jwt_data() -> dict[str, any]:
 
 def encode_data(
     jwt_token_factory: security.JwtTokenFactory,
-) -> tuple[dict[str, any], security.JwtToken]:
+):
     data = prepare_jwt_data()
     token = jwt_token_factory.encode(data)
     return data, token
@@ -43,7 +46,7 @@ class TestJwtFactory:
     ):
         data, token = encode_data(jwt_token_factory)
         decoded_data = jwt_token_factory.decode(token)
-        decoded_data_from_lib = jwt.decode(token.token, jwt_secret, jwt_algorithm)
+        decoded_data_from_lib = jwt.decode(token.token, jwt_secret, [jwt_algorithm])
         assert data == decoded_data
         assert decoded_data_from_lib == decoded_data
 
@@ -57,6 +60,6 @@ class TestJwtFactory:
         logger.debug(type(token))
         decoded_data = jwt_token_factory.decode(token.token)
         logger.debug(type(token))
-        decoded_data_from_lib = jwt.decode(token.token, jwt_secret, jwt_algorithm)
+        decoded_data_from_lib = jwt.decode(token.token, jwt_secret, [jwt_algorithm])
         assert data == decoded_data
         assert decoded_data_from_lib == decoded_data

@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{ include = "utils", from = "src" }]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.12"
 pytest = "^7.4.3"
 pyyaml = "^6.0.1"
 black = "^23.11.0"
@@ -16,7 +16,11 @@ pyjwt = "^2.8.0"
 pylint = "^3.0.2"
 blackdoc = "^0.3.9"
 psycopg2-binary = "^2.9.9"
+loguru = "^0.7.2"
 
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.22.2"
 
 [build-system]
 requires = ["poetry-core"]
@@ -30,7 +34,7 @@ ignore = "CVS"
 jobs = 1
 limit-inference-results = 100
 persistent = "yes"
-py-version = 3.10
+py-version = 3.12
 recursive = "yes"
 suggestion-mode = "yes"
 unsafe-load-any-extension = "no"
@@ -68,7 +72,7 @@ confidence = [
     "CONTROL_FLOW",
     "INFERENCE",
     "INFERENCE_FAILURE",
-    "UNDEFINE",
+    "UNDEFINED",
 ]
 disable = [
     "raw-checker-failed",
@@ -80,7 +84,8 @@ disable = [
     "deprecated-pragma",
     "use-symbolic-message-instead",
     "use-implicit-booleaness-not-comparison-to-string",
-    "use-implicit-booleaness-not-comparison-to-zer",
+    "missing-module-docstring",
+    "too-few-public-methods",
 ]
 
 [tool.pylint."TYPECHECK"]
@@ -104,3 +109,18 @@ init-import = "no"
 addopts = "-s -vvv"
 log_cli = "true"
 log_level = "DEBUG"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "W", "Q", "I"]
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 20
+
+[tool.basedpyright]
+reportAny = false
+reportUnusedCallResult = false
+reportUnknownMemberType = false
