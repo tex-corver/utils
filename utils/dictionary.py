@@ -4,7 +4,7 @@ from typing import Any
 def filter_dict(
     orginal_dict: dict[Any, Any],
     ignore_keys: set[Any] | None = None,
-):
+) -> dict[Any, Any]:
     """filter_dict.
 
     Args:
@@ -19,7 +19,7 @@ def is_subdict(
     dict_a: dict[Any, Any],
     dict_b: dict[Any, Any],
     ignore_keys: set[Any] | None = None,
-):
+) -> tuple[bool, Any]:
     """is_subdict.
 
     Args:
@@ -31,15 +31,25 @@ def is_subdict(
     dict_a = filter_dict(dict_a, ignore_keys)
     dict_b = filter_dict(dict_b, ignore_keys)
 
-    # Note: The `<=` operator checks if all items in `dict_a` are present in `dict_b`.
-    return dict_a.items() <= dict_b.items()
+    for attr, value in dict_a.items():
+        if attr not in dict_b:
+            return False, attr
+        if isinstance(value, dict):
+            result, key = is_subdict(value, dict_b[attr])
+            if not result:
+                return False, key
+            continue
+        if value != dict_b[attr]:
+            return False, attr
+
+    return True, None
 
 
 def is_equal(
     dict_a: dict[Any, Any],
     dict_b: dict[Any, Any],
     ignore_keys: set[Any] | None = None,
-):
+) -> tuple[bool, Any]:
     """is_equal.
 
     Args:
@@ -47,17 +57,24 @@ def is_equal(
         dict_b (dict[Any, Any]): dict_b
         ignore_keys (set[Any] | None): ignore_keys
     """
-    dict_a = filter_dict(dict_a, ignore_keys)
-    dict_b = filter_dict(dict_b, ignore_keys)
 
-    return dict_a == dict_b
+    is_a_subdict = is_subdict(dict_a, dict_b, ignore_keys)
+    is_b_subdict = is_subdict(dict_b, dict_a, ignore_keys)
+
+    if not is_a_subdict[0]:
+        return is_a_subdict
+
+    if not is_b_subdict[0]:
+        return is_b_subdict
+
+    return True, None
 
 
 def merge_dicts(
     dict_a: dict[Any, Any],
     dict_b: dict[Any, Any],
     ignore_keys: set[Any] | None = None,
-):
+) -> dict[Any, Any]:
     """merge_dicts.
 
     Args:
@@ -65,7 +82,17 @@ def merge_dicts(
         dict_b (dict[Any, Any]): dict_b
         ignore_keys (set[Any] | None): ignore_keys
     """
-    dict_a = filter_dict(dict_a, ignore_keys)
-    dict_b = filter_dict(dict_b, ignore_keys)
 
-    return {**dict_a, **dict_b}
+    if ignore_keys is None:
+        ignore_keys = set()
+
+    result = dict_a.copy()
+    for key, value in dict_b.items():
+        if key in ignore_keys:
+            continue
+        if key in result and isinstance(value, dict) and isinstance(result[key], dict):
+            result[key] = merge_dicts(result[key], dict_b[key])
+        else:
+            result[key] = value
+
+    return result
