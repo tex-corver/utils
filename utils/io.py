@@ -9,4 +9,5 @@ def yaml_to_dict(file_path: str):
     """
     with open(file_path, "r", encoding="utf-8") as file:
 
-        return yaml.load(file, Loader=yaml.FullLoader)
+        d = yaml.load(file, Loader=yaml.FullLoader)
+        return d
