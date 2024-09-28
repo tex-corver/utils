@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "utils"
+name = "tex-corver-utils"
 version = "0.1.1"
 description = ""
 authors = ["Long Le <hjjddbz@gmail.com>"]
