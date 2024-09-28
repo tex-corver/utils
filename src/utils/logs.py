@@ -3,6 +3,7 @@ import json
 import logging
 import os
 from typing import Any
+
 from . import configuration, dictionary
 from .values import parsers
 
@@ -260,5 +261,9 @@ def bootstrap():
     logging.setLogRecordFactory(LogRecord)
 
     load_config()
+
+def get_logger(name: str) -> Logger:
+    name = name or os.environ.get("HOSTNAME", "local")
+    return logging.getLogger(name)
 
 bootstrap()
