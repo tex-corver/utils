@@ -274,7 +274,7 @@ def bootstrap():
 
     load_config()
 
-def get_logger(name: str) -> Logger:
+def get_logger(name: str = None) -> Logger:
     name = name or os.environ.get("HOSTNAME", "local")
     return logging.getLogger(name)
 
