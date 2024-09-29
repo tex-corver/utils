@@ -1,9 +1,11 @@
+import logging
 import os
 import pathlib
-import logging
 from typing import Any
-from utils import creational, io
+
 import yaml
+
+from utils import creational, io
 
 logger = logging.getLogger(__file__)
 
@@ -18,7 +20,7 @@ def get_config_path():
 
 
 @creational.singleton
-class Configuration(dict[str, Any]):
+class Configuration(dict):
     """
     A custom dictionary class for storing configuration settings.
 
@@ -58,7 +60,6 @@ def load_config(config_path: str = ".configs") -> dict[str, Any]:
 
                 data = io.yaml_to_dict(filepath)
                 config |= data
-    logger.debug(f"Load config from: {config}")
     return config
 
 
