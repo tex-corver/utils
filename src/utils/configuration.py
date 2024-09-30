@@ -37,7 +37,7 @@ config: Configuration = Configuration()
 
 def load_config(config_path: str = ".configs") -> dict[str, Any]:
     """Load configuration files from the specified path and return a dictionary with the
-    configuration settings.
+    configuration settings. All old configuration settings are removed.
 
     Args:
         config_path (str): The path where the configuration files are located. Defaults to
@@ -49,6 +49,9 @@ def load_config(config_path: str = ".configs") -> dict[str, Any]:
     config_path = config_path or get_config_path()
     global config
     config = Configuration()
+
+    # remove all existing configuration settings
+    config.clear()
 
     for root, _, files in os.walk(config_path):
         for file in files:
