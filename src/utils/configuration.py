@@ -35,7 +35,7 @@ class Configuration(dict[str, Any]):
 config: Configuration = Configuration()
 
 
-def load_config(config_path: str = ".configs") -> dict[str, Any]:
+def load_config(config_path: str = None) -> dict[str, Any]:
     """Load configuration files from the specified path and return a dictionary with the
     configuration settings. All old configuration settings are removed.
 
