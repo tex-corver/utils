@@ -18,6 +18,8 @@ jobs:
             echo "Repository has content. Proceeding with normal sync."
           else
             echo "Repository is empty. Initializing it."
+            git config --global user.email "arc-runner-set@texcorver.com"
+            git config --global user.name "GitHub Actions"
             git checkout --orphan temp-branch
             git commit --allow-empty -m "Initial commit"
             git push VPL temp-branch:master
