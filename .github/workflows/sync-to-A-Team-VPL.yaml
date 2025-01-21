@@ -10,21 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
       - name: Create sync branch
         run: |
-          ls -l ~/.ssh
-          whoami
-          git clone git@github.com:A-Team-VPL/utils.git
-          cd utils
-
-          if git ls-remote --exit-code origin; then
+          git remote add VPL git@github.com:A-Team-VPL/utils.git
+          if git ls-remote --exit-code VPL; then
             echo "Repository has content. Proceeding with normal sync."
           else
             echo "Repository is empty. Initializing it."
-            git checkout -b master
-            # git config user.name "GitHub Actions"
+            git checkout --orphan temp-branch
             git commit --allow-empty -m "Initial commit"
-            git push origin master
+            git push VPL temp-branch:master
           fi
 
   sync:
@@ -49,7 +45,6 @@ jobs:
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           ref: master
 
-      # Step 4: Merge sync into master in A-Team-VPL/utils
       - name: Merge sync to master
         run: |
           git fetch origin sync
