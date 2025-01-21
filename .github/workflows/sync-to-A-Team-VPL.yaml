@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Create sync branch
         run: |
+          ls -l ~/.ssh
+          whoami
           git clone git@github.com:A-Team-VPL/utils.git
           cd utils
 
