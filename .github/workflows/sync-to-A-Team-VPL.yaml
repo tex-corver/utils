@@ -38,7 +38,8 @@ jobs:
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Push to A-Team-VPL/sync
         run: |
-          git push git@github.com:A-Team-VPL/utils.git master:sync
+          git remote add VPL git@github.com:A-Team-VPL/utils.git
+          git push VPL master:sync
 
   merge-and-delete-sync:
     runs-on: ubuntu-latest
