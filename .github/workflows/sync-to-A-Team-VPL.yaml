@@ -11,6 +11,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - run: | 
+          git config --global user.email "arc-runner-set@texcorver.com"
+          git config --global user.name "GitHub Actions"
 
       - name: Add VPL remote
         run: |
@@ -22,8 +25,6 @@ jobs:
             echo "Repository has content. Proceeding with normal sync."
           else
             echo "Repository is empty. Initializing it."
-            git config --global user.email "arc-runner-set@texcorver.com"
-            git config --global user.name "GitHub Actions"
             git checkout --orphan temp-branch
             git reset --hard # Ensure that the branch is empty
             git commit --allow-empty -m "Initial commit"
@@ -34,6 +35,9 @@ jobs:
     runs-on: arc-runner-set
     steps:
       - uses: actions/checkout@v4
+      - run: | 
+        git config --global user.email "arc-runner-set@texcorver.com"
+        git config --global user.name "GitHub Actions"
       - name: Push to A-Team-VPL/sync
         run: |
           git remote add VPL git@github.com:A-Team-VPL/utils.git
@@ -52,10 +56,12 @@ jobs:
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           ref: master
 
-      - name: Merge sync to master
-        run: |
+      - run: | 
           git config --global user.email "arc-runner-set@texcorver.com"
           git config --global user.name "GitHub Actions"
+
+      - name: Merge sync to master
+        run: |
           git fetch origin sync
           git checkout master
           git merge origin/sync --no-edit --allow-unrelated-histories
