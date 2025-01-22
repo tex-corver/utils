@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  init-first-commit-and-sync:
+  init-first-commit:
     runs-on: arc-runner-set
 
     steps:
@@ -29,15 +29,19 @@ jobs:
             git commit --allow-empty -m "Initial commit"
             git push VPL temp-branch:master
           fi
-
+  sync:
+    needs: init-first-commit
+    runs-on: arc-runner-set
+    steps:
+      - uses: actions/checkout@v4
       - name: Push to A-Team-VPL/sync
         run: |
-          git checkout master
+          git remote add VPL git@github.com:A-Team-VPL/utils.git
           git push VPL master:sync
 
   merge-and-delete-sync:
     runs-on: ubuntu-latest
-    needs: init-first-commit-and-sync
+    needs: sync
 
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +55,7 @@ jobs:
           git fetch origin sync
           git checkout master
           # Ensure that the sync branch is not conflicting with the master branch
-          git merge sync --no-edit
+          git merge sync --no-edit --allow-unrelated-histories
 
       - uses: ad-m/github-push-action@master
         with:
