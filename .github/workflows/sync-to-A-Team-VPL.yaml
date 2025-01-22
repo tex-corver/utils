@@ -36,8 +36,7 @@ jobs:
         run: |
           git remote add VPL git@github.com:A-Team-VPL/utils.git
           git fetch VPL
-          git reset --hard HEAD
-          git push --force VPL master:sync
+          git push VPL master:sync
 
   merge-and-delete-sync:
     runs-on: ubuntu-latest
