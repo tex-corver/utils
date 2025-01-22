@@ -52,6 +52,8 @@ jobs:
 
       - name: Merge sync to master
         run: |
+          git config --global user.email "arc-runner-set@texcorver.com"
+          git config --global user.name "GitHub Actions"
           git fetch origin sync
           git checkout master
           git merge origin/sync --no-edit --allow-unrelated-histories
