@@ -54,8 +54,7 @@ jobs:
         run: |
           git fetch origin sync
           git checkout master
-          # Ensure that the sync branch is not conflicting with the master branch
-          git merge sync --no-edit --allow-unrelated-histories
+          git merge origin/sync --no-edit --allow-unrelated-histories
 
       - uses: ad-m/github-push-action@master
         with:
