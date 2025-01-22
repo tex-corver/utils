@@ -38,7 +38,8 @@ jobs:
         run: |
           git remote add VPL git@github.com:A-Team-VPL/utils.git
           git fetch VPL
-          git push --no-verify VPL master:sync -v
+          git merge VPL/master --no-edit --allow-unrelated-histories 
+          git push VPL master:sync
 
   merge-and-delete-sync:
     runs-on: ubuntu-latest
