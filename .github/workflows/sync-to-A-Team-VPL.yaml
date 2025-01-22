@@ -28,6 +28,7 @@ jobs:
             git reset --hard # Ensure that the branch is empty
             git commit --allow-empty -m "Initial commit"
             git push VPL temp-branch:master
+            git push VPL temp-branch:sync
           fi
   sync:
     needs: init-first-commit
