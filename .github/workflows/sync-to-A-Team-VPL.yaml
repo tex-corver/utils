@@ -11,9 +11,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Create sync branch
+
+      - name: Add VPL remote
         run: |
           git remote add VPL git@github.com:A-Team-VPL/utils.git
+      
+      - name: Init first commit
+        run: |
           if git ls-remote --exit-code VPL; then
             echo "Repository has content. Proceeding with normal sync."
           else
@@ -25,11 +29,12 @@ jobs:
             git commit --allow-empty -m "Initial commit"
             git push VPL temp-branch:master
           fi
-      - name: Sync to A-Team-VPL
+
+      - name: Push to A-Team-VPL/sync
         run: |
           git push VPL master:sync
 
-  merge:
+  merge-and-delete-sync:
     runs-on: ubuntu-latest
     needs: init-first-commit-and-sync
 
