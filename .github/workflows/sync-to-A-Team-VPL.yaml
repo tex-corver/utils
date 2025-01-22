@@ -28,15 +28,12 @@ jobs:
             git reset --hard # Ensure that the branch is empty
             git commit --allow-empty -m "Initial commit"
             git push VPL temp-branch:master
-            git push VPL temp-branch:sync
           fi
   sync:
     needs: init-first-commit
     runs-on: arc-runner-set
     steps:
       - uses: actions/checkout@v4
-        with: 
-          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Push to A-Team-VPL/sync
         run: |
           git remote add VPL git@github.com:A-Team-VPL/utils.git
