@@ -10,12 +10,15 @@ jobs:
     runs-on: arc-runner-set
 
     steps:
-      - uses: actions/checkout@v4
-      - run: | 
+      - run: |
           git config --global user.email "arc-runner-set@texcorver.com"
           git config --global user.name "GitHub Actions"
       - name: Init first commit
         run: |
+          git clone git@github.com:tex-corver/utils.git
+          cd utils
+
+          # Add the remote to the repository
           git remote add VPL git@github.com:A-Team-VPL/utils.git
           if git ls-remote --exit-code VPL; then
             echo "Repository has content. Proceeding with normal sync."
@@ -30,9 +33,11 @@ jobs:
     needs: init-first-commit
     runs-on: arc-runner-set
     steps:
-      - uses: actions/checkout@v4
       - name: Push to A-Team-VPL/sync
         run: |
+          git clone git@github.com:tex-corver/utils.git
+          cd utils
+
           git remote add VPL git@github.com:A-Team-VPL/utils.git
           git fetch VPL
           git push VPL master:sync
@@ -42,28 +47,21 @@ jobs:
     needs: sync
 
     steps:
-      - uses: actions/checkout@v4
-        with:
-          repository: A-Team-VPL/utils
-          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          ref: master
-
       - run: | 
           git config --global user.email "arc-runner-set@texcorver.com"
           git config --global user.name "GitHub Actions"
 
       - name: Merge sync to master
         run: |
+          # Clone the repository
+          git clone git@github.com:A-Team-VPL/utils.git
+          cd utils
+
+          # Merge the sync branch to master
           git fetch origin sync
           git checkout master
           git merge origin/sync --no-edit --allow-unrelated-histories
 
-      - uses: ad-m/github-push-action@master
-        with:
-          repository: A-Team-VPL/utils
-          branch: master
-          ssh: true
-
-      - name: Delete the sync branch
-        run: |
+          # Push the changes to the repository and delete the sync branch
+          git push origin master
           git push origin --delete sync
