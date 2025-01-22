@@ -7,7 +7,7 @@ on:
 
 jobs:
   init-first-commit:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
 
     steps:
       - uses: actions/checkout@v4
