@@ -36,7 +36,7 @@ jobs:
         run: |
           git remote add VPL git@github.com:A-Team-VPL/utils.git
           git fetch VPL
-          git gc --prune=now --aggressive
+          git reset --hard HEAD
           git push --force VPL master:sync
 
   merge-and-delete-sync:
