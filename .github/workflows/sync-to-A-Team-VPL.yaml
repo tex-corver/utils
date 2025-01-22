@@ -54,6 +54,7 @@ jobs:
       - name: Merge sync to master
         run: |
           # Clone the repository
+          chmod 600 ~/.ssh/id_ed25519
           git clone git@github.com:A-Team-VPL/utils.git
           cd utils
 
