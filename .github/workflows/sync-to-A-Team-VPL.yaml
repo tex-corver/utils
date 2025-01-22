@@ -34,10 +34,11 @@ jobs:
     runs-on: arc-runner-set
     steps:
       - uses: actions/checkout@v4
+        with: 
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Push to A-Team-VPL/sync
         run: |
-          git remote add VPL git@github.com:A-Team-VPL/utils.git
-          git push VPL master:sync --force
+          git push git@github.com:A-Team-VPL/utils.git master:sync
 
   merge-and-delete-sync:
     runs-on: ubuntu-latest
