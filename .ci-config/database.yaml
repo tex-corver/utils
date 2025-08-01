@@ -1,0 +1,10 @@
+database:
+  type: "postgres"
+  framework: "sqlalchemy"
+  connection:
+    host: "61.28.227.243"
+    port: "5432"
+    username: "admin"
+    password: "adminpw"
+    name: "user-system"
+    uri: "postgresql://admin:adminpw@61.28.227.243:5432/user-system"

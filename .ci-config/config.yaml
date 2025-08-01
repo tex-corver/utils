@@ -1,0 +1,33 @@
+env: dev
+
+database:
+  url: mysql://root:password@localhost:3306/utils
+
+redis:
+  host: localhost
+  port: 6379
+  username: username
+  password: password
+  ssl: True
+  ssl_ca_certs: /path/to/ca.crt
+  db: 0
+
+log:
+  metadata:
+    keys:
+      - application
+      - environment
+      - service
+      - spider_id
+      - dataset_name
+      - job_id
+      - entity_id
+      - step
+
+  logger:
+    file_mode: a
+    level: INFO
+    verbose: False
+    outputs:
+      - stdout
+      - file
