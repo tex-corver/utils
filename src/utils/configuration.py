@@ -2,7 +2,7 @@ import os
 import pathlib
 import logging
 from typing import Any
-from utils import creational, io
+from utils import creational, io, dictionary
 import yaml
 
 logger = logging.getLogger(__file__)
@@ -60,7 +60,7 @@ def load_config(config_path: str = None) -> dict[str, Any]:
                 logger.debug(f"Loading configuration file: {filepath}")
 
                 data = io.yaml_to_dict(filepath)
-                config |= data
+                config = dictionary.merge_dicts(config, data)
     logger.debug(f"Load config from: {config}")
     return config
 
